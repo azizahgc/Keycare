@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Your Profile</title>
+    <link rel="stylesheet" href="{% static 'css/patient.css' %}">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Edit Profile</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="form-group">
+            <strong>First Name:</strong> {{ user_form.first_name }} 
+            <strong>Last Name:</strong> {{ user_form.last_name }} 
+            <strong>Email:</strong> {{ user_form.email }}      <!-- Render the email field -->
+            </div>
+            <div class="form-group">
+            <strong>Age:</strong> {{ profile_form.age }}    <!-- Render the age field -->
+            <strong>Weight:</strong> {{ profile_form.weight }} <!-- Render the weight field -->
+            <strong>Height:</strong>{{ profile_form.height }} <!-- Render the height field -->
+            </div>
+
+            <button type="submit" class="submit-btn">Save Changes</button>
+        </form>
+        
+        <button class="cancel-btn"> <a href="{% url 'patientdashboard' %}" class="cancel-btn">Cancel</a> </button>
+    </div>
+</body>
+
+</html>

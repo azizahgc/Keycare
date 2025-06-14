@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <link rel="stylesheet" href="{% static 'css/otp.css' %}">
+</head>
+<body>
+    <div class="otp-container">
+        <div class="otp-box">
+            <h2>Enter OTP</h2>
+            <form method="POST" class="otp-form" id="otp-form">
+                {% csrf_token %}
+                <label for="otp">Please enter the 6-digit OTP sent to your email:</label>
+                <div class="otp-input-wrapper">
+                    <input type="text" id="otp1" maxlength="1" class="otp-input" required>
+                    <input type="text" id="otp2" maxlength="1" class="otp-input" required>
+                    <input type="text" id="otp3" maxlength="1" class="otp-input" required>
+                    <input type="text" id="otp4" maxlength="1" class="otp-input" required>
+                    <input type="text" id="otp5" maxlength="1" class="otp-input" required>
+                    <input type="text" id="otp6" maxlength="1" class="otp-input" required>
+                </div>
+                
+                <!-- Hidden field to hold combined OTP -->
+                <input type="hidden" name="otp" id="otp" />
+            
+                <button type="submit" class="otp-btn">Verify OTP</button>
+            </form>
+
+            <p><a href="#" id="resend-otp-link">Didn't receive the OTP? Click here to resend.</a></p>
+
+            <p class="error-message">{% if messages %}{{ messages }}{% endif %}</p>
+        </div>
+    </div>
+    
+    <script>
+        // Automatically focus the next input field when a digit is entered
+        const otpInputs = document.querySelectorAll('.otp-input');
+        otpInputs.forEach((input, index) => {
+            input.addEventListener('input', function() {
+                // If the current field is filled and it's not the last field, move to the next one
+                if (this.value.length === this.maxLength && index < otpInputs.length - 1) {
+                    otpInputs[index + 1].focus();
+                }
+            });
+
+            // Handle backspace to move focus to previous field
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && index > 0 && !this.value) {
+                    otpInputs[index - 1].focus();
+                }
+            });
+        });
+
+        // Handle form submission and combine the OTP digits into one hidden field
+        document.getElementById("otp-form").addEventListener("submit", function(e) {
+            const digits = [];
+            for (let i = 1; i <= 6; i++) {
+                let val = document.getElementById("otp" + i).value;
+                if (!val || val.length !== 1) {
+                    alert("Please fill all 6 digits");
+                    e.preventDefault();
+                    return;
+                }
+                digits.push(val);
+            }
+            document.getElementById("otp").value = digits.join("");
+        });
+
+        document.getElementById("resend-otp-link").addEventListener("click", function(e) {
+            e.preventDefault();  // Prevent default link behavior
+            fetch('/resend_otp/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'  // CSRF token for protection
+                },
+                body: JSON.stringify({ username: '{{ request.session.username }}' })  // Send username
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('A new OTP has been sent to your email.');
+                } else {
+                    alert('Failed to resend OTP. Please try again later.');
+                }
+            })
+            .catch(error => {
+                alert('Error while resending OTP.');
+            });
+        });
+    </script>
+</body>
+</html>

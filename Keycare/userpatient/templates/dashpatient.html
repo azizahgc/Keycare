@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/dashpatient.css' %}">
+</head>
+
+<body>
+    <!-- Hamburger Menu Button -->
+    <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <button class="sidebar-close-btn" id="sidebar-close-btn">×</button>
+        
+        <div class="group">
+            <img src="{% static 'logo.png' %}" class="logo-keycare" alt="KeyCare Logo">
+            <h2 class="text-keycare">KeyCare</h2>
+            <ul>
+                <li class="text"><a href="{% url 'patientdashboard' %}" class="doc-link">Dashboard</a></li>
+                <li class="text"><a href="{% url 'listofdoct' %}" class="doc-link">Doctor</a></li>
+            </ul>
+        </div>
+
+        <!-- Logout Button -->
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="button">
+                Logout
+            </button>
+        </form>
+    </div>
+
+    <!-- Content -->
+    <div class="content" id="content">
+        <!-- Header -->
+        <div class="header">
+            <!-- Avatar -->
+            <div class="profile">
+                <img src="{% static 'avatar.png' %}" alt="User Avatar">
+                <div class="badge"></div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Overview Section -->
+            <div class="overview-container">
+                {% for patient_profile in patient_profile %}
+            <!--     <h1 class="overview-title">Welcome, {{ patient_profile.user.first_name }}</h1> -->
+                
+                <div class="avatar">
+                    {{ patient_profile.user.first_name|first }}
+                </div>
+                
+                <h2 class="name-text">{{ patient_profile.user.first_name }} {{ patient_profile.user.last_name }}</h2>
+                <p class="email-text">{{ patient_profile.user.email }}</p>
+                {% endfor %}
+            </div>
+
+            <!-- Cards Container for responsive layout -->
+            <div class="cards-container">
+                <!-- Patient Details Card -->
+                <div class="details-container">
+                    <h2 class="h2patient">Patient Details</h2>
+                    
+                    <div class="text-gender">
+                        {% for patient_profile in patient_profile %}
+                        <div>
+                            <label class="label">Gender</label>
+                            <div class="gender-placeholder">{{ patient_profile.gender }}</div>
+                        </div>
+                        
+                        <div>
+                            <label class="label2">Blood Type</label>
+                            <div class="blood-placeholder">{{ patient_profile.blood_type }}</div>
+                        </div>
+                        
+                        <div>
+                            <label class="label3">Age</label>
+                            <div class="age-placeholder">{{ patient_profile.age }}</div>
+                        </div>
+                        
+                        <div>
+                            <label class="label4">Weight</label>
+                            <div class="weight-placeholder">{{ patient_profile.weight }} kg</div>
+                        </div>
+                        
+                        <div>
+                            <label class="label5">Height</label>
+                            <div class="height-placeholder">{{ patient_profile.height }} cm</div>
+                        </div>
+                        
+                        <div>
+                            <label class="label6">Diseases</label>
+                            <div class="diseases-placeholder">{{ patient_profile.dieases }}</div>
+                        </div>
+                        
+                        <button class="viewdetails" id="viewBtn">View Details</button>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Assigned Doctor Card -->
+                <div class="assigned-container">
+                    <h2 class="h2assigned">Assigned Doctor</h2>
+                    <h3 class="h2assignedname">
+                        {% if assigned_doctor_name %}
+                        {{ assigned_doctor_name }}
+                        {% else %}
+                        No doctor assigned
+                        {% endif %}
+                    </h3>
+                    <p class="h2assignedspec">
+                        {% if assigned_doctor_department %}
+                        {{ assigned_doctor_department }}
+                        {% else %}
+                        N/A
+                        {% endif %}
+                    </p>
+                    <a href="{% url 'listofdoct' %}">
+                        <button class="changedoc">Change Doctor</button>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Doctor Notes Section -->
+            <div class="docnotes-container">
+                {% for patient_profile in patient_profile %}
+                <h2 class="docnotes">Doctor's Notes</h2>
+                <div class="notes-placeholder">{{ patient_profile.notes }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // View Details Button
+            const viewBtn = document.getElementById('viewBtn');
+            if (viewBtn) {
+                viewBtn.onclick = function () {
+                    window.location.href = "{% url 'patient' %}";
+                };
+            }
+
+            // Sidebar Toggle Elements
+            const sidebarToggle = document.getElementById("sidebar-toggle");
+            const sidebar = document.getElementById("sidebar");
+            const closeButton = document.getElementById("sidebar-close-btn");
+            const content = document.getElementById("content");
+
+            // Function to check screen size and update sidebar visibility
+            function checkScreenSize() {
+                if (window.innerWidth > 768) {
+                    // Desktop: Hide toggle button, show sidebar, adjust content margin
+                    sidebarToggle.style.display = "none";
+                    sidebar.classList.remove("sidebar-visible", "sidebar-hidden");
+                    content.classList.remove("sidebar-collapsed");
+                } else {
+                    // Mobile: Show toggle button, hide sidebar initially, collapse content
+                    sidebarToggle.style.display = "block";
+                    sidebar.classList.add("sidebar-hidden");
+                    sidebar.classList.remove("sidebar-visible");
+                    content.classList.add("sidebar-collapsed");
+                }
+            }
+
+            // Initialize on page load
+            checkScreenSize();
+
+            // Update on window resize
+            window.addEventListener("resize", checkScreenSize);
+
+            // Toggle sidebar visibility when hamburger button is clicked
+            sidebarToggle.addEventListener("click", function () {
+                sidebar.classList.toggle("sidebar-visible");
+                sidebar.classList.toggle("sidebar-hidden");
+                
+                // Hide the toggle button when sidebar is open
+                if (sidebar.classList.contains("sidebar-visible")) {
+                    sidebarToggle.style.display = "none";
+                }
+            });
+
+            // Close the sidebar when the close button is clicked
+            closeButton.addEventListener("click", function () {
+                sidebar.classList.remove("sidebar-visible");
+                sidebar.classList.add("sidebar-hidden");
+                sidebarToggle.style.display = "block";
+            });
+
+            // Close sidebar when clicking outside of it on mobile
+            document.addEventListener("click", function(event) {
+                if (window.innerWidth <= 768) {
+                    const isClickInsideSidebar = sidebar.contains(event.target);
+                    const isClickOnToggle = sidebarToggle.contains(event.target);
+                    
+                    if (!isClickInsideSidebar && !isClickOnToggle && sidebar.classList.contains("sidebar-visible")) {
+                        sidebar.classList.remove("sidebar-visible");
+                        sidebar.classList.add("sidebar-hidden");
+                        sidebarToggle.style.display = "block";
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

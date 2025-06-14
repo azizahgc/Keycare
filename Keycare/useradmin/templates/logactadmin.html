@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Log</title>
+    <link rel="stylesheet" href="{% static 'css/dashadmin.css' %}">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="container">
+        <div class="sidebar" id="sidebar">
+            <div class="group">
+                <button class="sidebar-close-btn" id="sidebar-close-btn">&#10005;</button>
+                <img src="{% static 'logo.png' %}" class="logo-keycare">
+                <h2 class="text-keycare">KeyCare</h2>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'listofdoc' %}">Doctor</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'listofnurse' %}">Nurse</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'listofpatient' %}">Patient</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logactadmin' %}">Activity Log</a>
+                    </li>
+                </ul>
+                <!-- Logout Button -->
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="button">Logout</button>
+                </form>
+            </div>
+        </div>
+        <!-- Header -->
+        <div class="main-content">
+            <!-- Sidebar Toggle Button (visible on small screens only) -->
+            <button class="sidebar-toggle" id="sidebar-toggle">&#9776;</button>
+
+            <div class="content">
+                <div class="header">
+                    
+                </div>
+
+                <div class="activity">
+                    <h2>Activity Log</h2>
+                    <div class="textbox-doctor">
+                        <form method="GET" action="{% url 'activity_log' %}">
+                            <input type="search" name="q" placeholder="Name, Role, or Month " value="{{ query }}"
+                                autocomplete="off">
+                            <button type="submit">Search</button>
+                        </form>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Roles</th>
+                                <th>Last Login</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in activity_log %}
+                            <tr>
+                                <td>{{ log.first_name }} {{ log.last_name }}</td>
+                                <td>{{ log.role }}</td>
+                                <td>{{ log.last_login }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4">No activity logs available.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sidebarToggle = document.getElementById("sidebar-toggle");
+        const sidebar = document.getElementById("sidebar");
+        const closeButton = document.getElementById("sidebar-close-btn");
+
+        // Function to check screen size and update visibility of sidebar toggle
+        function checkScreenSize() {
+            // If the screen width is larger than 768px, hide the sidebar toggle
+            if (window.innerWidth > 768) {
+                sidebarToggle.style.display = "none";
+            } else {
+                // Otherwise, show the sidebar toggle
+                sidebarToggle.style.display = "block";
+            }
+        }
+
+        // Call function on page load and when window is resized
+        window.addEventListener("resize", checkScreenSize);
+        window.addEventListener("load", checkScreenSize);
+
+        // Toggle sidebar visibility when hamburger button is clicked
+        sidebarToggle.addEventListener("click", function () {
+            sidebar.classList.toggle("sidebar-visible"); // Toggle sidebar visibility
+            // Hide the button when the sidebar is open
+            if (sidebar.classList.contains("sidebar-visible")) {
+                sidebarToggle.style.display = "none";
+            } else {
+                sidebarToggle.style.display = "block"; // Show the button again when sidebar is closed
+            }
+        });
+
+        // Close the sidebar when the close button is clicked
+        closeButton.addEventListener("click", function () {
+            sidebar.classList.remove("sidebar-visible");  // Hide the sidebar
+            sidebarToggle.style.display = "block"; // Show the toggle button again
+        });
+    </script>
+</body>
+
+</html>

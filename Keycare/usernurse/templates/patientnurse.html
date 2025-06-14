@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Of Patient</title>
+    <link rel="stylesheet" href="{% static 'css/patientnurse.css' %}">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="container sidebar">
+        <div class="group">
+            <img src="{% static 'logo.png' %}" class="logo-keycare">
+            <h2 class="text-keycare">KeyCare</h2>
+            <ul>
+                <li class="text"><a href="{% url 'nursedashboard' %}" class="doc-link">Dashboard</a></li>
+                <li class="text">Patient</li>
+            </ul>
+        </div>
+
+        <!-- Logout Button -->
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="button">
+                Logout
+            </button>
+        </form>
+    </div>
+
+    <!-- Header -->
+    <div class="content">
+        <div class="header">
+
+
+            <!-- Avatar -->
+            <div class="profile">
+                <img src="avatar.png" alt="User  Avatar">
+                <div class="badge"></div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="list-edit">
+                <h2 class="List-title"> List of Patient</h2>
+                <div class="textbox-doctor">
+                    <form method="GET" action="{% url 'patientnurse' %}">
+                        <input type="search" name="q" placeholder="Search patients by name or doctor"
+                            value="{{ query }}" autocomplete="off">
+                        <button class="search-btn" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+            <table>
+                <tr class="top-table">
+                    <th>Patient ID</th>
+                    <th>Name</th>
+                    <th>Assigned Doctor</th>
+                    <th class="edit-table">View</th>
+                </tr>
+
+                {% for patient_info in patients_doctors %}
+                <tr>
+                    <td>{{ patient_info.patient.id }}</td>
+                    <td>{{ patient_info.patient.first_name }} {{ patient_info.patient.last_name }}</td>
+                    <td>
+                        {% if patient_info.doctor %}
+                        {{ patient_info.doctor.user.first_name }} {{ patient_info.doctor.user.last_name }} -
+                        {{patient_info.doctor.departement }}
+                        {% else %}
+                        No doctor assigned
+                        {% endif %}
+                    </td>
+                    <td> <a href="{% url 'patientsview' patient_info.patient.id %}" class="cancel-btn">Edit</a> </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No patients available.</td>
+                </tr>
+                {% endfor %}
+            </table>
+
+
+        </div>
+</body>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Patient Profile</title>
+    <!-- Link to the register.css file -->
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <style>
+        /* Modal Background */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .modal-header {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .modal-footer {
+            padding: 20px 30px;
+            text-align: center;
+        }
+
+        .modal-footer button {
+            background: linear-gradient(135deg, #22CCB2 0%, #1ba89a 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-footer button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(34, 204, 178, 0.3);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-buttons {
+            margin-top: 20px;
+            background-color: #22CCB2FF;
+            border-radius: 5px;
+            color: white;
+            border: #22CCB2FF;
+            cursor: pointer;
+            text-decoration: none;
+            padding: 10px 20px;
+        }
+
+        .btn-confirm,
+        .btn-cancel {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .btn-confirm {
+            background-color: #1FB7A0FF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .btn-cancel {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        /* ERROR POPUP STYLES */
+        .error-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .error-overlay.show {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        .error-popup {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .error-overlay.show .error-popup {
+            transform: scale(1);
+        }
+
+        .error-popup h2 {
+            color: #e74c3c;
+            font-size: 24px;
+            font-weight: 600;
+            margin: 0 0 16px 0;
+        }
+
+        .error-popup p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.5;
+            margin: 0 0 32px 0;
+        }
+
+        .error-popup .btn-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .error-popup .btn-ok {
+            background-color: #22CCB2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 32px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .error-popup .btn-ok:hover {
+            background-color: #1ba89a;
+        }
+
+        .error-icon {
+            width: 48px;
+            height: 48px;
+            background-color: #fee;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 24px;
+            color: #e74c3c;
+        }
+    </style>
+</head>
+
+<body>
+
+    <form action="{% url 'registpatient' %}" method="POST" autocomplete="off">
+        {% csrf_token %}
+
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" value="{{ request.POST.username|default:'' }}" required><br>
+
+        <label for="first_name">First Name:</label>
+        <input type="text" id="first_name" name="first_name" value="{{ request.POST.first_name|default:'' }}"
+            required><br>
+
+        <label for="last_name">Last Name:</label>
+        <input type="text" id="last_name" name="last_name" value="{{ request.POST.last_name|default:'' }}" required><br>
+
+        <label class="form-label" for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{ request.POST.email|default:'' }}" required><br>
+
+        <label class="form-label3" for="password">Password:</label>
+        <input type="password" id="password" name="password" autocomplete="new-password" required><br>
+
+        <!-- PatientProfile model fields -->
+        <label class="form-label4" for="assigned_doc">Assigned Doctor:</label>
+        <select id="assigned_doc" name="assigned_doc" required>
+
+            {% for doctor in doctors %}
+            <option value="{{ doctor.id }}">{{ doctor.user.get_full_name }} - {{ doctor.departement }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label class="form-label" for="age">Age:</label>
+        <input type="number" id="age" name="age" min="0" value="{{ request.POST.age|default:'' }}" required><br>
+
+        <label for="weight">Weight (kg):</label>
+        <input type="number" id="weight" name="weight" step="0.01" min="0" value="{{ request.POST.weight|default:'' }}"
+            required><br>
+
+        <label for="height">Height (cm):</label>
+        <input type="number" id="height" name="height" min="0" value="{{ request.POST.height|default:'' }}"
+            required><br>
+
+        <label for="blood_type">Blood Type:</label>
+        <select id="blood_type" name="blood_type" required>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+        </select><br>
+
+        <label class="form-label1" for="gender">Gender:</label>
+        <select id="gender" name="gender" required>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select><br>
+
+        <label class="form-label2" for="dieases">Diseases:</label>
+        <input type="text" id="dieases" name="dieases" value="{{ request.POST.dieases|default:'' }}" required><br>
+
+        <label for="symptomps">Symptoms:</label>
+        <textarea id="symptomps" name="symptomps" rows="4"
+            required>{{ request.POST.symptomps|default:'' }}</textarea><br>
+
+        <label class="form-label" for="notes">Notes:</label>
+        <textarea id="notes" name="notes" rows="4">{{ request.POST.notes|default:'' }}</textarea><br>
+
+        <input type="submit" value="Create Patient Profile">
+        <div class="modal-footer">
+            <a href="{% url 'listofpatient' %}" class="modal-buttons">Go Back</a>
+        </div>
+    </form>
+
+    <!-- Success Popup (Modal) -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>Success!</h2>
+            </div>
+            <div class="modal-body">
+                <p id="successMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <a href="{% url 'listofpatient' %}" class="modal-buttons">Go Back</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ERROR POPUP -->
+    <div class="error-overlay" id="errorOverlay">
+        <div class="error-popup">
+            <div class="error-icon">⚠️</div>
+            <h2>Registration Error</h2>
+            <p id="errorMessage"></p>
+            <div class="btn-container">
+                <button class="btn-ok" onclick="closeErrorPopup()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Success Modal Logic (existing)
+        var successMessage = "{{ success|escapejs }}";
+        if (successMessage) {
+            document.getElementById('successMessage').innerText = successMessage;
+            document.getElementById('successModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').style.display = 'none';
+        }
+
+        // ERROR POPUP FUNCTIONS
+        function showErrorPopup(message) {
+            console.log('Showing error popup:', message); // Debug
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorOverlay').classList.add('show');
+        }
+
+        function closeErrorPopup() {
+            document.getElementById('errorOverlay').classList.remove('show');
+        }
+
+        // Close error popup when clicking outside
+        document.getElementById('errorOverlay').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeErrorPopup();
+            }
+        });
+
+        // Check for Django error and show popup
+        var errorMessage = "{{ error|escapejs }}";
+        if (errorMessage) {
+            console.log('Django error detected:', errorMessage); // Debug
+            showErrorPopup(errorMessage);
+        }
+
+        document.getElementById('password').addEventListener('input', function () {
+            var password = this.value;
+            var message = "";
+            if (password.length < 8) {
+                message = "Password is too short!";
+            } else if (!/\d/.test(password)) {
+                message = "Password must contain at least one number.";
+            } else if (!/[A-Za-z]/.test(password)) {
+                message = "Password must contain at least one letter.";
+            } else {
+                message = "Password is strong.";
+            }
+
+            // Display the password strength message
+            document.getElementById('password-strength-message').innerText = message;
+        });
+    </script>
+
+</body>
+
+</html>

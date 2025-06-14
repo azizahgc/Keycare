@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Information</title>
+    <link rel="stylesheet" href="{% static 'css/patient.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Patient Information</h1>
+        <div class="patient-details">
+            <div class="detail-item">
+                <strong>Name:</strong> {{ patient_profile.user.username }}
+            </div>
+            <div class="detail-item">
+                <strong>Address:</strong> {{ patient_profile.address }}
+            </div>
+            <div class="detail-item">
+                <strong>Phone:</strong> {{ patient_profile.phone }}
+            </div>
+            <div class="detail-item">
+                <strong>Email:</strong> {{ patient_profile.user.email }}
+            </div>
+            <div class="detail-item">
+                <strong>Gender:</strong> {{ patient_profile.gender }}
+            </div>
+            <div class="detail-item">
+                <strong>Age:</strong> {{ patient_profile.age }}
+            </div>
+            <div class="detail-item">
+                <strong>Weight:</strong> {{ patient_profile.weight }} kg
+            </div>
+            <div class="detail-item">
+                <strong>Height:</strong> {{ patient_profile.height }} cm
+            </div>
+            <div class="detail-item">
+                <strong>Blood Type:</strong> {{ patient_profile.blood_type }}
+            </div>
+            <div class="detail-item">
+                <strong>Diseases:</strong> {{ patient_profile.dieases }}
+            </div>
+            <div class="detail-item">
+                <strong>Symptoms:</strong> {{ patient_profile.symptomps }}
+            </div>
+            <div class="detail-item">
+                <strong>Doctor's Notes:</strong> {{ patient_profile.notes }}
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button class="go-back" onclick="window.history.back()">Go Back</button>
+
+            <button class="cancel-btn"> <a href= "{% url 'edit_patient_profile' %}" class="cancel-btn">Edit</a> </button>
+        </div>
+    </div>
+</body>
+</html>

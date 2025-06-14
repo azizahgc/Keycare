@@ -1,0 +1,264 @@
+* {
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  body {
+    display: flex;
+    height: 100vh;
+    background-color: #f8f9fa;
+  }
+  
+   /* Header*/
+  .header {
+    display: flex;
+    justify-content:flex-end;
+    margin-bottom: 30px;
+    top: 0;
+    right: 0;
+    background: #22CCB2FF;
+    height: 50px;
+    width: 100%;
+    border-radius: 2px;
+    padding: 0 20px;
+}
+
+.textbox {
+  padding: 8px 14px;
+  border-radius: 8px;
+  margin-left: 600px;
+}
+
+.textbox input{
+  width: 192px; 
+  height: 36px; 
+  padding-left: 34px; 
+  padding-right: 12px; 
+  font-family: sans-serif; 
+  font-size: 14px; 
+  line-height: 22px; 
+  font-weight: 400; 
+  background: #FFFFFFFF;
+  border-radius: 8px;
+  border: 1px solid white;
+  outline: none;
+  
+}
+
+.text-keycare {
+    margin-bottom: 50px;
+    margin-top: -35px;
+    margin-left: 50px;
+    color: #00b4b4;
+  }
+
+  /* Sidebar*/
+  .sidebar {
+    width: 210px;
+    background-color: #fff;
+    padding: 30px 20px;
+    border-right: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+    padding: 10px;
+  }
+  
+  .logo-keycare{
+    width: 40px;
+    margin-right: 20px;
+    margin-left: 3px;
+    height: auto;
+    border-radius: 3px;
+  }
+
+  .sidebar ul {
+    list-style: none;
+  }
+  
+  .sidebar ul li {
+    padding: 12px 10px;
+    color: #333;
+    margin-bottom: 8px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.2s;
+  }
+  
+  .sidebar ul li:hover,
+  .sidebar ul .active {
+    background-color: #e7f8f8;
+    color: #00b4b4;
+    font-weight: 600;
+  }
+  /* Logout Button*/
+  .button {
+    height: 36px;
+    border: #22CCB2FF;;
+    border-radius: 4px;
+    color: white;;
+    background-color: #22CCB2FF;
+    gap: 6px; 
+    justify-content: center; 
+    top: 834px; 
+    left: 13px; 
+    align-items: center; 
+    cursor: pointer;
+    width: 150px;
+    
+  }
+  
+  .button :hover {
+    color: #1FB7A0FF;
+    background: #FFFFFFFF;
+  
+  }
+  
+  .button:hover:active {
+    color: #1BA18DFF;
+    background: #FFFFFFFF;
+  }
+  
+  .button:disabled {
+    opacity: 0.4; 
+  }
+
+a.cancel-btn {
+  background-color: #22CCB2FF;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 20px;
+  text-decoration: none;
+}  
+
+
+.list-edit {
+  display: flex;
+}
+.List-title {
+  margin-bottom: 20px;
+  margin-top: 30px;
+  margin-left: 37px;
+}
+
+.new-button {
+  background-color: #22CCB2FF;
+  color: white;
+  cursor: pointer;
+  height: 36px;
+  width: 68px; 
+  border: none; 
+  border-radius: 6px;
+  margin-left: 616px;
+  margin-top: 22px;
+  
+}
+
+.textbox-doctor {
+  padding: 8px 14px;
+  border-radius: 8px;
+}
+
+.textbox-doctor input {
+  width: 192px; 
+  height: 36px; 
+  padding-left: 34px; 
+  padding-right: 12px; 
+  font-family: sans-serif; 
+  font-size: 14px; 
+  line-height: 26px; 
+  font-weight: 400; 
+  background: #22CCB2FF;
+  border-radius: 8px;
+  border: none;
+  margin-top: 14px;
+  color: white;
+  border-color: #00b4b4;
+  outline: none;
+}
+
+.top-table{
+  background-color:#22CCB2FF;
+}
+
+.edit-table {
+  color:#22CCB2FF;
+}
+
+.edit-button {
+  background-color: #22CCB2FF;
+  color: white;
+  cursor: pointer;
+  height: 36px;
+  width: 68px; 
+  border: none; 
+  border-radius: 6px;
+}
+
+.edit-button :hover{
+  color: white;
+  background-color: white;
+}
+
+.edit-button:hover:active {
+  color: #22CCB2FF;
+  background-color: white;
+}
+
+.edit-button:disabled {
+  opacity: 0.4; 
+}
+
+table {
+  width: 1070px;
+  border-collapse: collapse;
+  background-color:#22CCB2FF;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  margin-left: 30px;
+  text-align: center;  
+}
+
+thead {
+  background-color: #00b4b4;
+  color: #fff;
+  text-align: justify;
+}
+
+th, td {
+  padding: 14px 20px;
+  border-bottom: 1px solid #22CCB2FF;
+}
+
+tbody tr:last-child td {
+  border-bottom: #22CCB2FF;
+}
+
+.main {
+  flex: 1;
+  padding: 30px;
+  width: calc(100% - 210px);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+}
+
+.doc-link {
+    color: inherit;
+    text-decoration: none;
+   }

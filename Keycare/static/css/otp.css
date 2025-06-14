@@ -1,0 +1,145 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f3f3f3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 1rem;
+}
+
+/* OTP Container */
+.otp-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* OTP Box */
+.otp-box h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* OTP Input Form */
+.otp-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.otp-input-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;  /* Consistent spacing between inputs */
+    margin-bottom: 20px;
+}
+
+.otp-input {
+    width: clamp(36px, 10vw, 45px);  /* Responsive width */
+    height: clamp(50px, 12vw, 60px); /* Responsive height */
+    font-size: clamp(18px, 4vw, 24px); /* Text scales too */
+    text-align: center;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.otp-input:focus {
+    border-color: #22CCB2;
+    box-shadow: 0 0 6px rgba(34, 204, 178, 0.5);
+}
+
+.otp-btn {
+    width: 100%;  /* Full width */
+    max-width: 300px;
+    padding: 12px;
+    font-size: 16px;
+    background-color: #22ccb2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+input[type="text"] {
+    font-size: 16px; /* Prevent zoom */
+}
+
+.otp-btn:hover {
+    background-color: #1fae9d; /* Darker shade */
+    transform: scale(1.03); /* Slight zoom effect */
+}
+
+.otp-input:focus {
+    border-color: #22CCB2;
+    box-shadow: 0 0 5px rgba(34, 204, 178, 0.5);
+}
+
+/* Error Message */
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+#resend-otp-link {
+    color: rgb(26, 171, 150); /* Blue color for the link */
+    font-size: 14px; /* Adjust font size */
+    text-decoration: none; /* Remove underline */
+    font-weight: bold; /* Make it bold */
+    display: inline-block; /* Ensures the link can be styled more easily */
+    margin-top: 10px; /* Adds some space above the link */
+}
+
+/* Add hover effect to the resend link */
+#resend-otp-link:hover {
+    color: rgb(20, 127, 111); /* Darker blue when hovered */
+    text-decoration: underline; /* Underline the link on hover */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 400px) {
+    .otp-input {
+        width: 40px;
+        height: 50px;
+        font-size: 18px;
+    }
+
+    .otp-box h2 {
+        font-size: 20px;
+    }
+
+    #resend-otp-link {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 360px) {
+    .otp-input-wrapper {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .otp-input {
+        flex: 1 1 28%; /* Forces 3 per row */
+        max-width: 50px;
+    }
+}
+

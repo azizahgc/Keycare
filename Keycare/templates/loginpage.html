@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Keycare</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">KeyCare</div>
+        <nav class="nav-links">
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="login-box">
+            <h2>Let's Get Started</h2>
+            <p>Sign in to continue to Keycare</p>
+
+
+
+            <form method="POST" autocomplete="off">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="input-group">
+                    <input type="text" id="username" name="username" placeholder="Username" required>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" id="password" name="password" placeholder="Password" autocomplete="new-password" required>
+                </div>
+                <input type="hidden" name="next" value="{{ next }}">
+                <button class="btn" type="submit">Continue</button>
+            </form>
+
+            <p class="terms">By continuing, you agree to the updated <a href="#">Terms of Service</a> and <a
+                    href="#">Privacy Policy</a>.</p>
+        </div>
+    </div>
+    <script>
+        document.getElementById('password').addEventListener('focus', function () {
+            this.setAttribute('autocomplete', 'off');
+        });
+    </script>
+</body>
+
+</html>

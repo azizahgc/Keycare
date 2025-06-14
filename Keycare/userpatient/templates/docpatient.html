@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Of Doctor</title>
+    <link rel="stylesheet" href="{% static 'css/docpatient.css' %}">
+
+</head>
+
+<body>
+    <!-- Mobile menu toggle -->
+    <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">☰</button>
+
+    <!-- Overlay for mobile -->
+    <div class="overlay" onclick="closeMenu()"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div>
+            <div class="group">
+                <img src="{% static 'logo.png' %}" class="logo-keycare" alt="KeyCare Logo">
+                <h2 class="text-keycare">KeyCare</h2>
+            </div>
+            <ul>
+                <li class="text"><a href="{% url 'patientdashboard' %}" class="doc-link">Dashboard</a></li>
+                <li class="text"><a href="{% url 'listofdoct' %}" class="doc-link">Doctor</a></li>
+            </ul>
+        </div>
+
+        <!-- Logout Button -->
+        <form action="#" method="post">
+            <button type="submit" class="button">
+                Logout
+            </button>
+        </form>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content">
+        <!-- Header -->
+        <div class="header">
+            <div class="profile">
+                <img src="avatar.png" alt="User Avatar">
+                <div class="badge"></div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="list-edit">
+                <h2 class="List-title">List of Doctors</h2>
+                <div class="search-container">
+                    <div class="textbox-doctor">
+                        <form method="GET" action="{% url 'listofdoct' %}">
+                            <input type="search" name="q" placeholder="Search Doctor" 
+                                value="{{ query }}" autocomplete="off">
+                            <button type="submit">Search</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr class="top-table">
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Department</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Loop through doctors -->
+                        {% for item in doctor_info %}
+                        <tr>
+                            <td>{{ item.doctor.first_name }} {{ item.doctor.last_name }}</td>
+                            <td>{{ item.doctor.email }}</td>
+                            <td>{{ item.department }}</td>
+                            <td>
+                                <form method="POST" action="{% url 'changedoctor' %}" class="choose-doctor-form">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="doctor" value="{{ item.doctor_id }}">
+                                    <button type="button" class="choose-button" onclick="confirmChange(this.form)">Choose</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <h2>Confirm Doctor Change</h2>
+            <p>You are about to change your assigned doctor. Do you want to proceed?</p>
+            <div class="modal-buttons">
+                <button onclick="closeModal()">Go Back</button>
+                <button id="confirmBtn">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedForm = null;
+
+        // Mobile menu functionality
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.overlay');
+            const menuToggle = document.getElementById('menuToggle');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+            
+            // Hide toggle button when sidebar is open
+            if (sidebar.classList.contains('open')) {
+                menuToggle.classList.add('hide');
+            } else {
+                menuToggle.classList.remove('hide');
+            }
+        }
+
+        function closeMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.overlay');
+            const menuToggle = document.getElementById('menuToggle');
+            
+            sidebar.classList.remove('open');
+            overlay.classList.remove('show');
+            
+            // Show toggle button when sidebar is closed
+            menuToggle.classList.remove('hide');
+        }
+
+        // Modal functionality
+        function confirmChange(form) {
+            selectedForm = form;
+            document.getElementById('confirmModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('confirmModal').style.display = 'none';
+            selectedForm = null;
+        }
+
+        document.getElementById('confirmBtn').addEventListener('click', function () {
+            if (selectedForm) {
+                selectedForm.submit();
+            }
+        });
+
+        // Close modal when clicking outside of it
+        window.onclick = function (event) {
+            const modal = document.getElementById('confirmModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Close mobile menu when window is resized to desktop size
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                closeMenu();
+            }
+        });
+    </script>
+</body>
+
+</html>

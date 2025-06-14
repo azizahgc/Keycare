@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Information</title>
+    <link rel="stylesheet" href="{% static 'css/patient.css' %}">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Patient Information</h1>
+        <div class="patient-details">
+            <div class="detail-item">
+                <strong>Name:</strong> {{ patient_profile.user.first_name }} {{ patient_profile.user.last_name }} 
+            </div>
+            <div class="detail-item">
+                <strong>Email:</strong> {{ patient_profile.user.email }}
+            </div>
+            <div class="detail-item">
+                <strong>Gender:</strong> {{ patient_profile.gender }}
+            </div>
+            <div class="detail-item">
+                <strong>Age:</strong> {{ patient_profile.age }}
+            </div>
+            <div class="detail-item">
+                <strong>Weight:</strong> {{ patient_profile.weight }} kg
+            </div>
+            <div class="detail-item">
+                <strong>Height:</strong> {{ patient_profile.height }} cm
+            </div>
+            <div class="detail-item">
+                <strong>Blood Type:</strong> {{ patient_profile.blood_type }}
+            </div>
+        </div>
+
+        <form method="post" id="edit-form" class="hidden">
+            {% csrf_token %}
+            <div class="textarea">
+                <label for="id_dieases"><strong>Diseases:</strong></label>
+                {{ form.dieases }}
+            </div>
+            <div class="textarea">
+                <label for="id_symptomps"><strong>Symptoms:</strong></label>
+                {{ form.symptomps }}
+            </div>
+            <div class="textarea">
+                <label for="id_notes"><strong>Doctor's Notes:</strong></label>
+                {{ form.notes }}
+            </div>
+
+            <div class="buttons">
+                <button class="go-back" onclick="window.history.back()">Go Back</button>
+                <button class="edit" onclick="toggleEdit()">Save</button>
+            </div>
+    </div>
+    <script>
+        function toggleEdit() {
+            document.getElementById('view-mode').classList.add('hidden');
+            document.getElementById('edit-form').classList.remove('hidden');
+            document.getElementById('action-buttons').classList.add('hidden');
+        }
+
+        function cancelEdit() {
+            document.getElementById('edit-form').classList.add('hidden');
+            document.getElementById('view-mode').classList.remove('hidden');
+            document.getElementById('action-buttons').classList.remove('hidden');
+        }
+    </script>
+</body>
+
+</html>
